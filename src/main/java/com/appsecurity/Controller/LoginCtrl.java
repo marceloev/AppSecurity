@@ -2,6 +2,7 @@ package com.appsecurity.Controller;
 
 import com.appsecurity.Entity.User;
 import com.appsecurity.Services.LoginService;
+import com.appsecurity.Utils.Password;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,11 +39,19 @@ public class LoginCtrl {
         ModelAndView mv = null;
         try {
             User user = service.getUserByLogin(username);
-            if (user.getSenha().equals(password)) {
+            /*Verificar login SEM CRIPTOGRAFIA*/
+            /*if (user.getSenha().equals(password)) {
                 User.setCurrent(user);
                 return new ModelAndView("redirect:/anexos");
             } else
+            throw new NoResultException("NoResult");*/
+            /*Verificar login COM CRIPTOGRAFIA*/
+            if(user.getSenha().equals(new Password(false, password).getPassword())) {
+                User.setCurrent(user);
+                return new ModelAndView("redirect:/anexos");
+            } else {
                 throw new NoResultException("NoResult");
+            }
         } catch (NoResultException ex) {
             mv = new ModelAndView("Login");
             mv.getModelMap().addAttribute("throw001", true);
@@ -67,7 +76,12 @@ public class LoginCtrl {
                                   @RequestParam("password") String password) {
         ModelAndView mv = null;
         try {
-            User user = new User(name, username.toUpperCase(), password);
+            /*Sem criptografia - SALVAR NOVO USUÁRIO*/
+            /*User user = new User(name, username.toUpperCase(), password);*/
+            /*Com criptografia - SALVAR NOVO USUÁRIO*/
+            User user = new User(name,
+                    username.toUpperCase(),
+                    new Password(false, password).getPassword());
             service.addUser(user);
             mv = new ModelAndView("Login");
             mv.getModelMap().addAttribute("throw003",
