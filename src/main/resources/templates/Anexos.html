@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>AppSecurity © Anexos</title>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"></link>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:replace="fragments/header :: header"/>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Anexos do usuário: [[${user.codigo}]] -> [[${user.login}]] : [[${user.nome}]]</strong>
+    </div>
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-hover table-bordered">
+                <thead>
+                <tr>
+                    <th style="text-align:center">ID</th>
+                    <th style="text-align:center">Descrição</th>
+                    <th style="text-align:center">Arquivo</th>
+                    <th style="text-align:center">Extensão</th>
+                    <th style="text-align:center">Ação</R></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="anexo : ${anexos}">
+                    <td th:text="${anexo.codigo}" align="center"/>
+                    <td th:text="${anexo.descricao}" align="center"/>
+                    <td align="center">
+                        <div class="btn-group">
+                            <a class="btn btn-sm btn-primary"
+                               th:href="@{/download/{id} (id=${anexo.codigo})}">Download</a>
+                        </div>
+                    </td>
+                    <td th:text="${anexo.tipo}" align="center"/>
+                    <td align="center">
+                        <div class="btn-group">
+                            <a class="delete btn btn-sm btn-primary" style="position:absolute;right:60px"
+                               th:href="@{/edit/{id} (id=${anexo.codigo})}">Editar</a>
+                            <a class="delete btn btn-sm btn-danger"
+                               th:href="@{/remove/{id} (id=${anexo.codigo})}">Excluir</a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <a class="btn btn-sm btn-success" th:href="@{/add/}">Adicionar</a>
+    </div>
+</div>
+<div th:replace="fragments/footer :: footer"/>
+</body>
+</html>
